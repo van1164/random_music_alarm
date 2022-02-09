@@ -42,6 +42,26 @@ Future<void> main() async {
   runApp(const AlarmManagerExampleApp());
 }
 
+
+void alarm_start() async {
+  runApp(const ringring());
+}
+
+class ringring extends StatelessWidget {
+
+  const ringring({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    developer.log('ringring');
+    return MaterialApp(
+      home:Scaffold(
+        appBar: AppBar(
+        title: Text('First Route'),
+    ),),);
+  }
+}
 /// Example app for Espresso plugin.
 class AlarmManagerExampleApp extends StatelessWidget {
   const AlarmManagerExampleApp({Key? key}) : super(key: key);
@@ -92,6 +112,7 @@ class _AlarmHomePageState extends State<_AlarmHomePage> {
 
   // The callback for our alarm
   static Future<void> callback() async {
+    alarm_start();
     developer.log('Alarm fired!');
     // Get the previous cached count and increment it.
     final prefs = await SharedPreferences.getInstance();
@@ -136,12 +157,13 @@ class _AlarmHomePageState extends State<_AlarmHomePage> {
               key: const ValueKey('RegisterOneShotAlarm'),
               onPressed: () async {
                 await AndroidAlarmManager.oneShot(
-                  const Duration(seconds: 5),
+                  const Duration(seconds: 15),
                   // Ensure we have a unique alarm ID.
                   Random().nextInt(pow(2, 31) as int),
                   callback,
                   exact: true,
                   wakeup: true,
+                  alarmClock: true,
                 );
               },
               child: const Text(
